@@ -1,0 +1,343 @@
+
+<style>
+	.layui-tab{
+		height: 40px;
+		padding: 0;
+	}
+	.layui-tab-title{
+		padding: 0;
+		margin:0;
+	}
+	.layui-tab-content{
+		padding:0; 
+	}
+	#select_online,#select_gender{
+		width: 120px;
+		height: 30px;
+		margin-top: 10px;
+		border-radius: 4px;
+		margin-bottom: 10px;
+		margin-right: 20px;
+	}
+	#add{
+		float: right;
+		margin-right: 10px;
+		margin-top: 15px;
+		border-radius: 5px;
+		background-color: #ff6600;
+		color: #fff;
+	}
+	thead{
+		color: #fff;
+	}
+	.modal-backdrop.show{
+			z-index: -1;
+	}
+	#serviceModal{
+		margin-top: 40px;
+	}
+	#service_add{
+		float: right;
+		background-color: #ff6600;
+		margin-top: 10px;
+	}
+	i{
+		margin-right: 5px;
+	}	
+</style>
+<script>
+	$(function(){
+		var baseURL = "http://203.195.246.58:7777";
+		//加载数据
+		function loadService(){
+			var url = baseURL+"/CustomerService/findAll";
+			$.get(url,function(response){
+				$("#service_table tbody").empty()
+				response.data.forEach(function(item){
+					$(`<tr>
+						<td><input type="checkbox" value="`+item.id+`"/></td>
+						<td>`+item.username+`</td>
+						<td>`+item.realname+`</td>
+						<td>`+item.gender+`</td>
+						<td>`+item.status+`</td>
+						<td>
+							<a class="btn_del" href="javascript:void(0)"><i class="fa fa-trash text-secondary mr-2 "></i></a>
+							<a class="btn_upd" href="javascript:void(0)"><i class="fa fa-edit text-secondary"></i></a>
+						</td>
+					</tr>`).appendTo("#service_table tbody")
+				})
+			})
+		}
+		loadService();
+		//监听在线
+		$("#select_online").change(function(){
+			var val = $(this).val()
+			var obj = {
+				status:val
+			}
+			$("tbody").empty()
+			$.get(baseURL+"/CustomerService/findByEducation",obj,function(response){
+				loadOption()
+				response.data.forEach(function(item){
+					$(`<tr>
+						<td><input type="checkbox" value="`+item.id+`"/></td>
+						<td>`+item.username+`</td>
+						<td>`+item.realname+`</td>
+						<td>`+item.gender+`</td>
+						<td>`+item.status+`</td>
+						<td>
+							<a class="btn_del" href="javascript:void(0)"><i class="fa fa-trash text-secondary mr-2 "></i></a>
+							<a class="btn_upd" href="javascript:void(0)"><i class="fa fa-edit text-secondary"></i></a>
+						</td>
+					</tr>`).appendTo("tbody")
+				})
+			})
+		})
+		//监听性别
+		$("#select_gender").change(function(){
+			var val = $(this).val()
+			var obj = {
+				gender:val
+			}
+			$("tbody").empty()
+			$.get(baseURL+"/CustomerService/findByGender",obj,function(response){
+				// data = response.data
+				loadOption()
+				response.data.forEach(function(item){
+					$(`<tr>
+						<td><input type="checkbox" value="`+item.id+`"/></td>
+						<td>`+item.username+`</td>
+						<td>`+item.realname+`</td>
+						<td>`+item.gender+`</td>
+						<td>`+item.status+`</td>
+						<td>
+							<a class="btn_del" href="javascript:void(0)"><i class="fa fa-trash text-secondary mr-2 "></i></a>
+							<a class="btn_upd" href="javascript:void(0)"><i class="fa fa-edit text-secondary"></i></a>
+						</td>
+					</tr>`).appendTo("tbody")
+				})
+			})
+		})
+		function loadOption(){
+			$.get(baseURL+"/CustomerService/findAll",function(response){
+				response.data.forEach(function(item){
+					$('<option value='+item.status+'>'+item.status+'</option>').appendTo($('#select_online'))
+					$('<option value='+item.gender+'>'+item.gender+'</option>').appendTo($('#select_gender'))
+					$('<option value='+item.status+'>'+item.status+'</option>').appendTo($('#select_status'))
+				})
+			})	
+		}
+		loadOption()
+		//删除
+		function deleteService(){
+			$("tbody").on("click","a",function(event){
+				switch(this.className){
+				//删除
+					case "btn_del":
+					//获取当前行的id
+						var id = $(this).parents("tr").children().eq(0).find("input").val();
+						//与后台进行交互
+						var url = baseURL+"/CustomerService/deleteById"
+						var data = {
+							id:id
+						}
+						$.post(url,data,function(response){
+							if(response.status === 200){
+								//提示删除成功
+								loadService()
+								toast("删除成功");
+
+							}else{
+								toast("接口异常！")
+							}
+						})
+					break;
+				case "btn_upd":
+					//将当前行信息设置到表单中
+					var id = $(this).parents("tr").children().eq(0).find("input").val();
+					var username = $(this).parents("tr").children().eq(1).text();
+					var realname = $(this).parents("tr").children().eq(2).text();
+					var gender = $(this).parents("tr").children().eq(3).text();
+					var status = $(this).parents("tr").children().eq(4).text();
+					var id = $("#input_id").val(id);
+					var username = $("#input_username").val(username);
+					var realname = $("#input_realname").val(realname);
+					var gender = $("input[type=radio]:checked").val(gender);
+					var status = $("#select_status").val(status);
+					//显示模态框
+					$("#serviceModal").modal("show");
+					break;
+				}
+			event.preventDefault();				
+			})
+		}
+		deleteService();
+		//为提交按钮绑定事件
+		$("#submitService").on("click",function(){
+			// alert(1)
+			//获取参数
+			var id = $("#input_id").val()
+			var username = $("#input_username").val()
+			var realname = $("#input_realname").val()
+			var gender = $("input[type=radio]:checked").val()
+			var status = $("#select_status").val()
+			var url =baseURL+"/CustomerService/saveOrUpdate"
+			var data;
+			if(id){
+				data = {
+					id:id,
+					username:username,
+					realname:realname,
+					gender:gender,
+					status:status
+				}
+			} else{
+				data = {
+					username:username,
+					realname:realname,
+					gender:gender,
+					status:status
+				}
+			}
+			//调用后台接口保存
+			$.post(url,data,function(response){
+				if(response.status === 200){
+					loadService()
+					toast("保存成功")
+					var id = $("#input_id").val("")
+					var username = $("#input_username").val("")
+					var realname = $("#input_realname").val("")
+					var gender = $("input[type=radio]:checked").val("")
+					var status = $("#select_status").val("")
+					$("#serviceModal").modal("hide")
+				}
+				else{
+					toast("接口异常")
+				}
+			})
+		})
+		//点击添加按钮显示模态框
+		$("#service_add").on("click",function(){
+			$("#serviceModal").modal("show")
+		})
+		// 初始化toast
+		$(".toast").toast({
+			delay:2000
+		});
+		// 弹出提示框
+		function toast(msg){
+			$(".toast .toast-body").text(msg);
+			$(".toast").toast("show")
+		}
+	})
+</script>
+<div class="main">
+	<div class="layui-tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">客服列表</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	    <div class="layui-tab-item layui-show">
+			<select name="" id="select_online">
+				<option value="">在线</option>
+			</select>
+			<select name="" id="select_gender">
+				<option value="">性别</option>
+			</select>
+			<button id="service_add" class="layui-btn layui-btn-sm"><i class="fa fa-exclamation-circle"></i>添加客服</button>
+			<table class="table table-bordered table-sm text-center" id="service_table">
+				<thead class="bg-dark">
+					<tr>
+						<th>#</th>
+						<th>用户名</th>
+						<th>姓名</th>
+						<th>性别</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					
+				</tbody>
+			</table>
+			<!-- 模态框 -->
+			<div class="modal fade" id="serviceModal" tabindex="-1" >
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLongTitle">客服信息</h5>
+			      </div>
+			      <div class="modal-body">
+			      	<!-- 表单 -->
+					<form action="" id="service_form">
+						<!-- 编号 -->
+						 <div class="form-group row">
+							    <label for="input_id" class="col-3 text-right"></label>
+							    <div class="col-3">
+							    	<input type="hidden" name='id' class="form-control" id="input_id" style="width:230px">
+							    </div>
+						</div>
+						<!-- /编号 -->
+						<!-- 用户名 -->
+						 <div class="form-group row">
+							    <label for="input_username" class="col-3 text-right">用户名:</label>
+							    <div class="col-3">
+							    	<input type="text" name='username' class="form-control" id="input_username" style="width:230px">
+							    </div>
+						</div>
+						<!-- /用户名 -->
+						<!-- 姓名 -->
+						 <div class="form-group row">
+							    <label for="input_realname" class="col-3 text-right"> 姓名:</label>
+							    <div class="col-3">
+							    	<input type="text" name='realname' class="form-control" id="input_realname" style="width:230px">
+							    </div>
+						</div>
+						<!-- / 姓名 -->
+						<!-- 性别 -->
+					    <div class="form-group row" id="input_gender">
+					    	 <label for="input_gender" class="col-3 text-right">性别:</label>
+					    	<div class="form-check form-check-inline">
+							  <input class="form-check-input" type="radio" name="gender" id="input_gender" value="男">男
+							</div>
+							<div class="form-check form-check-inline">
+							  <input class="form-check-input" type="radio" name="gender" id="input_gender" value="女">女
+							</div>
+					  	</div>
+						<!-- /性别 -->
+						<!-- 状态 -->
+						 <div class="form-group row">
+							    <label for="select_status" class="col-3 text-right"> 状态:</label>
+							    <div class="col-3">
+							    	<select name="status" class="form-control" id="select_status" style="width:230px"></select> 
+							    </div>
+						</div>
+						<!-- / 状态 -->	
+					</form>
+					<!-- /表单 --> 
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+			        <button type="button" class="btn btn-primary" id="submitService">保存</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			<!-- /模态框 -->
+			
+	    </div>
+	  </div>
+	</div>
+	<!-- 提示框 -->
+	<div class="toast" style="position: absolute;top: 1em;right: 1em">
+	  <div class="toast-header">
+	    <i class="fa fa-bell text-success mr-5"></i>
+	    <strong class="mr-auto">success</strong>
+	    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+	      <span>&times;</span>
+	    </button>
+	  </div>
+	  <div class="toast-body"> </div> 
+	</div>
+	<!-- /提示框 -->	
+</div>

@@ -1,0 +1,565 @@
+<style>
+	.layui-tab{
+		height: 40px;
+		padding: 0;
+	}
+	.layui-tab-title{
+		padding: 0;
+		margin:0;
+	}
+	.layui-tab-content{
+		padding:0; 
+	}
+	.modal-backdrop.show{
+			z-index: -1;
+	}
+	thead{
+		color: #fff;
+	}
+	#pass{
+		background-color:#008000; 
+	}
+	#reject{
+		background-color: #ff0000;
+	}
+	.modal-body{
+		padding: 0;
+		margin: 0;
+	}
+	#employmentModal{
+		margin-top: 40px;
+	}
+	#salary{
+		float: right;
+		color: #ff6600;
+		font-weight: bold;
+		margin-right: 10px;
+	}
+	#num,#workingHours{
+		margin-right: 10px;
+	}
+	#title{
+		margin-left: 180px;
+	}
+	#welfare{
+		width: 30px;
+		height:20px;
+		background-color: #8080c0;
+		color: #fff; 
+	}
+	#bussinessModal{
+		margin-top: 40px;
+	}
+	.top>b{
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+	.top>p{
+		margin-bottom: 0;
+		margin-top: 5px;
+		margin-left: 10px;
+		color: #999999;
+	}
+	#select_all,#select_job{
+		width: 120px;
+		height: 30px;
+		border-radius: 5px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+</style>
+<script>
+	$(function(){
+		var baseURL = "http://203.195.246.58:7777";
+		var dateParse=(dataString)=>{
+		  if(dataString){
+		    let date = new Date(dataString);
+		    let Y = date.getFullYear() + '-';
+		    let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		    let D = (date.getDate()< 10 ? '0'+date.getDate() : date.getDate())+' ';
+		    let h = (date.getHours()< 10 ? '0'+date.getHours() : date.getHours())+ ':';
+		    let m = (date.getMinutes()< 10 ? '0'+date.getMinutes() : date.getMinutes())+ ':';
+		    let s = (date.getSeconds()< 10 ? '0'+date.getSeconds() : date.getSeconds());
+		    return Y+M+D+h+m+s;
+		  }else{
+		    return '';
+		  }
+		}
+		//渲染商家数据
+		function loadBussiness(){
+			var url = baseURL+"/Business/findAll";
+			$("#one").empty();
+			$.get(url,function(response){
+				loadbussinessOption();
+				response.data.forEach(function(item){
+				if(item.status === "审核通过"){
+					$(`<tr>
+					<td><input type="checkbox" value="`+item.id+`"/></td>
+					<td>`+item.name+`</td>
+					<td>`+item.contactName+`</td>
+					<td>`+item.contactPhone+`</td>
+					<td>`+item.industry+`</td>
+					<td>`+item.location+`</td>
+					<td>`+item.scale+`</td>
+					<td><a href="javascript:void(0)" class="description">查看</a></td>
+					<td>
+						<span style="color:#008000;">审核通过</span>
+					</td>
+					</tr>`).appendTo($("#one"));
+					} else if(item.status === "拒绝"){
+						$(`<tr>
+								<td><input type="checkbox" value="`+item.id+`"/></td>
+								<td>`+item.name+`</td>
+								<td>`+item.contactName+`</td>
+								<td>`+item.contactPhone+`</td>
+								<td>`+item.industry+`</td>
+								<td>`+item.location+`</td>
+								<td>`+item.scale+`</td>
+								<td><a href="javascript:void(0)" class="description">查看</a></td>
+								<td>
+									<span style="color:#ff0000;">已拒绝</span>	
+								</td>
+							</tr>`).appendTo($("#one"));
+						}else if(item.status === "待审核"){
+							$(`<tr>
+									<td><input type="checkbox" value="`+item.id+`"/></td>
+									<td>`+item.name+`</td>
+									<td>`+item.contactName+`</td>
+									<td>`+item.contactPhone+`</td>
+									<td>`+item.industry+`</td>
+									<td>`+item.location+`</td>
+									<td>`+item.scale+`</td>
+									<td><a href="javascript:void(0)" class="description">查看</a></td>
+									<td>
+										<button class="layui-btn layui-btn-xs" id="pass">通过</button>
+										<button class="layui-btn layui-btn-xs" id="reject">拒绝</button>	
+									</td>
+								</tr>`).appendTo($("#one"));
+
+						}
+					});
+				})
+			}
+			//重载数据
+			loadBussiness();
+			//加载商家页面
+			function loadbussinessOption(){
+				$.get(baseURL+"/Business/findAll",function(response){
+					response.data.forEach(function(item){
+						$(`<option value='+item.location+'>`+item.location+`</option>`).appendTo($("#select_all"))
+					})
+
+				})
+			}
+			loadbussinessOption();
+			//根据地址查询
+			$("#select_all").change(function(){
+				var val = $(this).val()
+				var obj = {
+					location:val
+				}
+				$("#one").empty();
+				$.get(baseURL+"/Business/findByLocation",obj,function(response){
+					loadbussinessOption();
+					response.data.forEach(function(item){
+						if(item.status === "审核通过"){
+						$(`<tr>
+						<td><input type="checkbox" value="`+item.id+`"/></td>
+						<td>`+item.name+`</td>
+						<td>`+item.contactName+`</td>
+						<td>`+item.contactPhone+`</td>
+						<td>`+item.industry+`</td>
+						<td>`+item.location+`</td>
+						<td>`+item.scale+`</td>
+						<td><a href="javascript:void(0)" class="description">查看</a></td>
+						<td>
+							<span style="color:#008000;">审核通过</span>
+						</td>
+						</tr>`).appendTo($("#one"));
+						} else if(item.status === "拒绝"){
+							$(`<tr>
+									<td><input type="checkbox" value="`+item.id+`"/></td>
+									<td>`+item.name+`</td>
+									<td>`+item.contactName+`</td>
+									<td>`+item.contactPhone+`</td>
+									<td>`+item.industry+`</td>
+									<td>`+item.location+`</td>
+									<td>`+item.scale+`</td>
+									<td><a href="javascript:void(0)" class="description">查看</a></td>
+									<td>
+										<span style="color:#ff0000;">已拒绝</span>	
+									</td>
+								</tr>`).appendTo($("#one"));
+							}
+							else if(item.status === "待审核"){
+								$(`<tr>
+									<td><input type="checkbox" value="`+item.id+`"/></td>
+									<td>`+item.name+`</td>
+									<td>`+item.contactName+`</td>
+									<td>`+item.contactPhone+`</td>
+									<td>`+item.industry+`</td>
+									<td>`+item.location+`</td>
+									<td>`+item.scale+`</td>
+									<td><a href="javascript:void(0)" class="description">查看</a></td>
+									<td>
+										<button class="layui-btn layui-btn-xs" id="pass">通过</button>
+										<button class="layui-btn layui-btn-xs" id="reject">拒绝</button>	
+									</td>
+								</tr>`).appendTo($("#one"));
+
+							}
+					})
+				})
+			})
+			// 渲染招聘数据
+			function loadEmployment(){
+			var url = baseURL+"/Employment/findAll";
+			$("#two").empty();
+			$.get(url,function(response){
+				response.data.forEach(function(item){
+					if(item.status === "招聘中"){
+						$(`<tr>
+    					<td><input type="checkbox" value="`+item.id+`"/></td>
+    					<td>`+item.title+`</td>
+    					<td>`+item.contactName+`</td>
+    					<td>`+item.contactPhone+`</td>
+    					<td>`+item.job+`</td>
+    					<td>`+dateParse(item.publishTime)+`</td>
+    					<td><a href="javascript:void(0)" class="description">查看</a></td>
+    					<td>
+    						<span style="color:#008000;">审核通过</span>
+    					</td>
+		    		</tr>`).appendTo($("#two"));
+					}
+					else if(item.status === null){
+						$(`<tr>
+	    					<td><input type="checkbox" value="`+item.id+`"/></td>
+	    					<td>`+item.title+`</td>
+	    					<td>`+item.contactName+`</td>
+	    					<td>`+item.contactPhone+`</td>
+	    					<td>`+item.job+`</td>
+	    					<td>`+dateParse(item.publishTime)+`</td>
+	    					<td><a href="javascript:void(0)" class="description">查看</a></td>
+	    					<td>
+	    						<button class="layui-btn layui-btn-xs" id="pass">通过</button>
+								<button class="layui-btn layui-btn-xs" id="reject">拒绝</button>
+	    					</td>
+			    		</tr>`).appendTo($("#two"));
+					}
+					 else {
+						$(`<tr>
+    					<td><input type="checkbox" value="`+item.id+`"/></td>
+    					<td>`+item.title+`</td>
+    					<td>`+item.contactName+`</td>
+    					<td>`+item.contactPhone+`</td>
+    					<td>`+item.job+`</td>
+    					<td>`+dateParse(item.publishTime)+`</td>
+    					<td><a href="javascript:void(0)" class="description">查看</a></td>
+    					<td>
+    						<span style="color:#ff0000;">已拒绝</span>
+    					</td>
+		    		</tr>`).appendTo($("#two"))
+								
+					} 
+
+					
+				})
+			})
+		}
+		// 加载数据结束
+		//重载数据开始
+		loadEmployment();
+		//重载数据结束
+		//监听下拉菜单中的job
+		$("#select_job").change(function(){
+			var val = $(this).val()
+			// console.log(val)
+			var obj = {
+				job:val
+			}
+			$("#two").empty();
+			$.get(baseURL+"/Employment/findByJob",obj,function(response){
+				loadOption()
+				response.data.forEach(function(item){
+						if(item.status === "招聘中"){
+						$(`<tr>
+    					<td><input type="checkbox" value="`+item.id+`"/></td>
+    					<td>`+item.title+`</td>
+    					<td>`+item.contactName+`</td>
+    					<td>`+item.contactPhone+`</td>
+    					<td>`+item.job+`</td>
+    					<td>`+dateParse(item.publishTime)+`</td>
+    					<td><a href="javascript:void(0)" class="description">查看</a></td>
+    					<td>
+    						<span style="color:#008000;">审核通过</span>
+    					</td>
+		    		</tr>`).appendTo($("#two"));
+					}
+					else if(item.status === null){
+						$(`<tr>
+	    					<td><input type="checkbox" value="`+item.id+`"/></td>
+	    					<td>`+item.title+`</td>
+	    					<td>`+item.contactName+`</td>
+	    					<td>`+item.contactPhone+`</td>
+	    					<td>`+item.job+`</td>
+	    					<td>`+dateParse(item.publishTime)+`</td>
+	    					<td><a href="javascript:void(0)" class="description">查看</a></td>
+	    					<td>
+	    						<button class="layui-btn layui-btn-xs" id="pass">通过</button>
+								<button class="layui-btn layui-btn-xs" id="reject">拒绝</button>
+	    					</td>
+			    		</tr>`).appendTo($("#two"));
+					}
+					 else {
+						$(`<tr>
+    					<td><input type="checkbox" value="`+item.id+`"/></td>
+    					<td>`+item.title+`</td>
+    					<td>`+item.contactName+`</td>
+    					<td>`+item.contactPhone+`</td>
+    					<td>`+item.job+`</td>
+    					<td>`+dateParse(item.publishTime)+`</td>
+    					<td><a href="javascript:void(0)" class="description">查看</a></td>
+    					<td>
+    						<span style="color:#ff0000;">已拒绝</span>
+    					</td>
+		    		</tr>`).appendTo($("#two"))
+								
+					} 
+
+				})
+			})
+		})
+		function loadOption(){
+			$.get(baseURL+"/Employment/findAll",function(response){
+				response.data.forEach(function(item){
+					$('<option value='+item.job+'>'+item.job+'</option>').appendTo($('#select_job'))
+				})
+			})
+		}
+		loadOption()
+		function loademploymentStatus(){
+			$("tbody").on("click","button",function(event){
+				var id = $(this).parents("tr").children().eq(0).find("input").val();
+					var data = {
+						id:id
+					}
+				$.get(baseURL+"/Employment/findById",data,function(response){
+					if($("#pass").text() == "招聘中"){
+						var title = response.data.title;
+						var contactName = response.data.contactName;
+						var contactPhone = response.data.contactPhone;
+						var job = response.data.job;
+						// var publishTime = response.data.publishTime;
+						var data = {
+							id:id,
+							title:title,
+							contactName:contactName,
+							contactPhone:contactPhone,
+							// publishTime:publishTime,
+							status:"审核通过"
+
+						}
+						$.post(baseURL+"/Employment/saveOrUpdate",data,function(response){
+							loadEmployment();
+							alert("修改成功");
+						})
+					} else{
+						var title = response.data.title;
+						var contactName = response.data.contactName;
+						var contactPhone = response.data.contactPhone;
+						var job = response.data.job;
+						// var publishTime = response.data.publishTime;
+						var data = {
+							id:id,
+							title:title,
+							contactName:contactName,
+							contactPhone:contactPhone,
+						// publishTime:publishTime,
+							status:"已拒绝"
+						}
+						$.post(baseURL+"/Employment/saveOrUpdate",data,function(response){
+							loadEmployment();
+							alert("修改成功");
+						})
+
+
+				}
+			
+				})
+			})
+		}
+		loademploymentStatus();
+		//给招聘查看绑定事件开始
+		function loadeEmploymentMessage(){
+			// 详情模态框弹出
+			$('#employment_table tbody').on({click:function(){
+				$('#employmentModal').modal('show')
+				var id = $(this).parents("tr").children().eq(0).find("input").val()
+			var data = {
+				id:id
+			}
+			var url = baseURL+"/Employment/findById"
+			$.get(url,data,function(response){
+				$("#modal-content2").empty()
+				$(`
+				     <div class="modal-header">
+				      	<div class="top">
+				      		<div style="margin-top: 15px;">
+				      			<b>岗位:`+response.data.job+`</b>
+				      			<span id="salary">薪资:`+response.data.salary+`元/月</span>
+				      		</div>
+				      		<div style="margin-top: 15px;">
+				      			<span id="num">招`+response.data.num+`人</span>
+					      		<span id="workingHours">工作经验:`+response.data.workingHours+`</span>
+				      		</div>
+				      		<div style="margin-top: 15px;"><i class="fa fa-map-marker" style="color:#868686; margin-right:10px;"></i>工作地点:`+response.data.province+`省`+response.data.city+`市</div>
+				      		<div style="margin-top: 15px;">
+				      			<span id="welfare">福利:`+response.data.welfare+`</span>
+				      			<span id="title">招聘公司:`+response.data.title+`</span>
+				      		</div>
+				      	</div>	
+				      </div>
+				      <div class="modal-body">
+				      	<div class="row">
+				      		<div class="col ml-3" style="margin-top:15px;">
+				      			<b >职位描述</b>
+				      			<p style="margin-top: 15px;">`+response.data.description+`</p>
+				      		</div>
+				      	</div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+				      </div>`).appendTo($("#modal-content2"))
+			})
+			}},'.description')
+			
+		}
+		loadeEmploymentMessage()
+		//给招聘查看绑定事件结束 
+		// 给商家查看绑定事件开始
+		function loadBussinessMessage(){
+			// 详情模态框弹出
+			$('#bussiness_table tbody').on({click:function(){
+				$('#bussinessModal').modal('show')
+				var id = $(this).parents("tr").children().eq(0).find("input").val()
+			var data = {
+				id:id
+			}
+			var url = baseURL+"/Business/findById"
+			$.get(url,data,function(response){
+				$("#modal-content1").empty()
+				$(`
+				     <div class="modal-header">
+				      	<div class="top">
+				      		<b>企业名称:`+response.data.name+`</b>
+				      		<p>行业类型:`+response.data.industry+`</p>
+				      		<p>公司规模:`+response.data.scale+`</p>
+				      	</div>	
+				      </div>
+				      <div class="modal-body" style="color:#999999;">
+				      	<div class="row">
+				      		<div class="col ml-4">类型:`+response.data.industry+`</div>
+				      	</div>
+				      	<div class="row">
+				      		<div class="col ml-4">成立时间:`+response.data.establishedTime+`</div>
+				      	</div>
+				      	<div class="row">
+				      		<div class="col ml-4">注册资本:`+response.data.registeredCapital+`</div>
+				      	</div>
+				      	<div class="row">
+				      		<div class="col ml-4">描述:`+response.data.description+`</div>
+				      	</div>
+				      	<div class="row">
+				      		<div class="col ml-4">营业执照:`+response.data.businessLicense+`</div>
+				      	</div>		
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+				      </div>`).appendTo($("#modal-content1"))
+			})
+			}},'.description')	
+		}
+		loadBussinessMessage()
+		// 给商家查看绑定事件结束	
+	})
+</script>
+<div class="main">
+	<div class="layui-tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">商家审核</li>
+	    <li>招聘审核</li>
+	    
+	  </ul>
+	  <div class="layui-tab-content">
+	  	<!-- 商家审核 -->
+	    <div class="layui-tab-item layui-show">
+	    	<select id="select_all">
+				<option value="">全部类型</option>
+			</select>
+			<!-- 表格 -->
+			<table class="table table-bordered table-sm text-center" id="bussiness_table">
+				<thead class="bg-dark">
+					<tr>
+						<th>#</th>
+						<th>企业名称</th>
+						<th>联系人</th>
+						<th>联系方式</th>
+						<th>行业</th>
+						<th>所在地</th>
+						<th>公司规模</th>
+						<th>详情</th>
+						<th width="100px">操作</th>
+					</tr>
+				</thead>
+				<tbody id="one">
+					
+				</tbody>
+			</table>
+	    </div>
+	    <!-- /商家审核 -->
+	    <!-- 招聘审核 -->
+	    <div class="layui-tab-item">
+	    	<select id="select_job">
+				<option value="">职位类型</option>
+			</select>
+			<!-- 表格 -->
+    		<table class="table table-bordered table-sm text-center" id="employment_table">
+    			<thead class="bg-dark">
+    				<tr>
+    					<th>#</th>
+    					<th>招聘标题</th>
+    					<th>发布人</th>
+    					<th>联系方式</th>
+    					<th>职位</th>
+    					<th>发布时间</th>
+    					<th>详情</th>
+    					<th>操作</th>
+    				</tr>
+    			</thead>
+    			<tbody id="two">
+
+    			</tbody>
+    			
+    		</table>
+	    </div>
+	    <!-- 招聘审核 -->
+	  </div>
+	</div>
+	<!-- 商家详情模态框 -->
+	<div class="modal" tabindex="-1" id="bussinessModal">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content" id="modal-content1">
+	    </div>
+	  </div>
+	</div>
+	<!-- /商家详情模态框 -->
+	<!-- 招聘详情模态框 -->
+	<div class="modal" tabindex="-1" id="employmentModal">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content" id="modal-content2">
+	    </div>
+	  </div>
+	</div>
+	<!-- /招聘详情模态框 -->
+
+</div>

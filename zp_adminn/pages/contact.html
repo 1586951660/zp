@@ -1,0 +1,154 @@
+<style>
+	thead{
+		color: #fff;
+	}
+	#btn_contact{
+		margin-bottom: 10px;
+		background-color: #ff6600;
+	}
+	.modal-backdrop.show{
+			z-index: -1;
+	}
+	#own{
+		margin-top: 40px;
+	}
+	span{
+		margin-right: 15px;
+	}
+	.fa-mobile{
+		color: blue;
+		font-size: 16px;
+	}
+	#name{
+		font-size: 22px;
+	}
+
+</style>
+<script>
+	$(function(){
+		var baseURL = "http://203.195.246.58:7777";
+		//时间转换函数
+		var dateParse=(dataString)=>{
+		  if(dataString){
+		    let date = new Date(dataString);
+		    let Y = date.getFullYear() + '-';
+		    let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		    let D = (date.getDate()< 10 ? '0'+date.getDate() : date.getDate())+' ';
+		    let h = (date.getHours()< 10 ? '0'+date.getHours() : date.getHours())+ ':';
+		    let m = (date.getMinutes()< 10 ? '0'+date.getMinutes() : date.getMinutes())+ ':';
+		    let s = (date.getSeconds()< 10 ? '0'+date.getSeconds() : date.getSeconds());
+		    return Y+M+D+h+m+s;
+		  }else{
+		    return '';
+		  }
+		}
+		//渲染数据
+		function loadContact(){
+			var url = baseURL+"/EmploymentJobhunter/findAllWithJobhAndEmpl";
+			$("tbody").empty()
+			$.get(url,function(response){
+				response.data.forEach(function(item){
+					$(`<tr>
+							<td><input type="checkbox" value="`+item.jobhunter.id+`"/></td>
+							<td>`+item.jobhunter.realname+`</td>
+							<td>`+item.jobhunter.telephone+`</td>
+							<td>`+item.employment.job+`</td>
+							<td><a href="javascript:void(0)">查看</a></td>
+							<td>`+dateParse(item.askTime)+`</td>
+						</tr>`).appendTo("tbody")
+				})
+			})
+		}
+		loadContact()
+		//给查看绑定事件处理函数
+		function loadMessage(){
+			$("tbody").on("click","a",function(){
+				var id = $(this).parents("tr").children().eq(0).find("input").val()
+				var data = {
+					id:id
+				}
+				$.get(baseURL+"/Jobhunter/findById",data,function(response){
+					$("#modal-content").empty()
+					$(`
+						<div class="modal-header">
+					      	<div class="top">
+					      		<span id="name">`+response.data.realname+`</span><span><i class="fa fa-mobile"></i></span><span>手机认证</span>
+					      	</div>	
+					      </div>
+					      <div class="modal-body">
+					      	<div class="row mt-3">
+					      		<div class="col-3"><span id="own" class="bg-primary">个人信息</span></div>
+					      	</div>
+							<div class="row mt-3">
+								<div class="col-6">性别:`+response.data.gender+`</div>
+								<div class="col-6">最高学历:`+response.data.education+`</div>
+							</div>
+							<div class="row mt-3">
+								<div class="col-6">出生年月:`+response.data.birth+`</div>
+								<div class="col-6">工作经验:`+response.data.workTime+`</div>
+							</div>		
+					      </div>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+					      </div>`).appendTo($("#modal-content"))
+						$("#own").modal("show")
+				})
+			})	
+
+		}
+		loadMessage()
+
+	})
+</script>
+<div class="main">
+	<button class="layui-btn layui-btn-sm" id="btn_contact">待联系</button>
+	<!-- 表格 -->
+	<table class="table table-bordered table-sm text-center" id="contact_table">
+		<thead class="bg-dark">
+			<tr>
+				<th width="60px;">#</th>
+				<th>求职人</th>
+				<th>联系方式</th>
+				<th>求职岗位</th>
+				<th>简历</th>
+				<th>申请时间</th>
+			</tr>
+		</thead>
+		<tbody>
+			
+		</tbody>
+		
+	</table>
+	<!-- /表格 -->
+	<!-- 模态框 -->
+	<div class="modal" tabindex="-1" id="own">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content" id="modal-content">
+	      <!-- <div class="modal-header">
+	      	<div class="top">
+	      		<span id="name">张三三</span><span><i class="fa fa-mobile"></i></span><span>手机认证</span>
+	      	</div>
+	      	
+	      </div>
+	      <div class="modal-body">
+	      	<div class="row mt-3">
+	      		<div class="col-3"><span id="own" class="bg-primary">个人信息</span></div>
+	      	</div>
+			<div class="row mt-3">
+				<div class="col-6">性别:男</div>
+				<div class="col-6">最高学历:本科</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-6">出生年月:</div>
+				<div class="col-6">工作经验:</div>
+			</div>		
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary" id="submit">Save changes</button>
+	      </div> -->
+	    </div>
+	  </div>
+	</div>
+	<!-- 模态框 -->
+</div>

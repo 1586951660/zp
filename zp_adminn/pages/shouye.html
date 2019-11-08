@@ -1,0 +1,615 @@
+<style>
+	.top{
+		margin-left: 25px;
+		margin-top: 20px;
+	}
+	.resume,.user,.bussiness,.browser{
+		width: 234px;
+		height: 94px;
+		border: 1px solid #ededed;
+		float: left;
+		margin-right: 30px;
+	}
+	.resume>span{
+		line-height: 2.5em;
+		margin-left: 30px;
+		font-size: 20px;
+		font-weight: bold;
+	}
+	.resume>p{
+		margin-left: 30px;
+	}
+	.resume>i{
+		float: right;
+		margin-top: 30px;
+		margin-right: 30px;
+	}
+	.user>span{
+		line-height: 2.5em;
+		margin-left: 30px;
+		font-size: 20px;
+		font-weight: bold;
+	}
+	.user>p{
+		margin-left: 30px;
+	}
+	.user>i{
+		float: right;
+		margin-top: 30px;
+		margin-right: 30px;
+	}
+	.bussiness>span{
+		line-height: 2.5em;
+		margin-left: 30px;
+		font-size: 20px;
+		font-weight: bold;
+	}
+	.bussiness>p{
+		margin-left: 30px;
+	}
+	.bussiness>i{
+		float: right;
+		margin-top: 30px;
+		margin-right: 30px;
+	}
+	.browser>span{
+		line-height: 2.5em;
+		margin-left: 30px;
+		font-size: 20px;
+		font-weight: bold;
+	}
+	.browser>p{
+		margin-left: 30px;
+	}
+	.browser>i{
+		float: right;
+		margin-top: 30px;
+		margin-right: 30px;
+	}
+	.bottom{
+		width: 680px;
+		margin-left: 25px;
+		margin-top: 150px;
+	}
+	.audit{
+		border-top: 1px solid #ededed;
+		border-bottom: 1px solid #ededed;
+		padding: 5px;
+	}
+	.right>div{
+		width: 340px;
+		height: 40px;
+		border-bottom: 1px solid #ededde;
+	}
+	.left{
+		float: left;
+	}
+	.right{
+		border: 1px solid #ededde;
+		float:right; 
+		margin-right:55px;
+	}
+	.right>div:last-child{
+		border-bottom: none;
+	}
+	.right>div>span{
+		margin-left: 15px;
+		line-height: 2.4em;
+	}
+	.right>div>.one{
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		float: right;
+		text-align: center;
+		margin-top: 6px;
+		margin-right: 20px;
+		background-color: #947adf;
+		color: #fff;
+	}
+	.right>div>.two{
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		float: right;
+		text-align: center;
+		margin-top: 6px;
+		margin-right: 20px;
+		background-color: #3bb0db;
+		color: #fff;
+	}
+	.right>div>.three{
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		float: right;
+		text-align: center;
+		margin-top: 6px;
+		margin-right: 20px;
+		background-color: #f5bb40;
+		color: #fff;
+	}
+	.right>div>.four{
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		float: right;
+		text-align: center;
+		margin-top: 6px;
+		margin-right: 20px;
+		background-color: #38bc9c;
+		color: #fff;
+	}
+	.right>div>.five{
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		float: right;
+		text-align: center;
+		margin-top: 6px;
+		margin-right: 20px;
+		background-color: #d94651;
+		color: #fff;
+	}
+	.right>div>.six{
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		float: right;
+		text-align: center;
+		margin-top: 6px;
+		margin-right: 20px;
+		background-color: #38bc9c;
+		color: #fff;
+	}
+	.right>div>.seven{
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		float: right;
+		text-align: center;
+		margin-top: 6px;
+		margin-right: 20px;
+		background-color: #d94651;
+		color: #fff;
+	}
+	.layui-tab{
+		height: 40px;
+		padding: 0;
+	}
+	.layui-tab-title{
+		padding: 0;
+		margin:0;
+	}
+	.layui-tab-content{
+		padding:0; 
+	}
+	.modal-backdrop.show{
+		z-index: -1;
+	}
+	#pass{
+		background-color:#008000; 
+	}
+	#reject{
+		background-color: #ff0000;
+	}
+	#bussinessModal>.modal-body{
+		padding: 0;
+		margin: 0;
+	}
+	#employmModal>.modal-body{
+		padding: 0;
+		margin: 0;
+	}
+	#employmentModal{
+		margin-top: 40px;
+	}
+	#salary{
+		float: right;
+		color: #ff6600;
+		font-weight: bold;
+		margin-right: 10px;
+	}
+	#num,#workingHours{
+		margin-right: 10px;
+	}
+	#title{
+		margin-left: 170px;
+	}
+	#welfare{
+		width: 30px;
+		height:20px;
+		background-color: #8080c0;
+		color: #fff; 
+	}
+	#bussinessModal{
+		margin-top: 40px;
+	}
+	.top>b{
+		margin-top: 20px;
+	}
+	.top>p{
+		margin-bottom: 0;
+		margin-top: 5px;
+		color: #999999;
+	}
+</style>
+<script>
+	$(function(){
+		var baseURL = "http://203.195.246.58:7777";
+		// var dateParse=(dataString)=>{
+		//   if(dataString){
+		//     let date = new Date(dataString);
+		//     let Y = date.getFullYear() + '-';
+		//     let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+		//     let D = (date.getDate()< 10 ? '0'+date.getDate() : date.getDate())+' ';
+		//     let h = (date.getHours()< 10 ? '0'+date.getHours() : date.getHours())+ ':';
+		//     let m = (date.getMinutes()< 10 ? '0'+date.getMinutes() : date.getMinutes())+ ':';
+		//     let s = (date.getSeconds()< 10 ? '0'+date.getSeconds() : date.getSeconds());
+		//     return Y+M+D+h+m+s;
+		//   }else{
+		//     return '';
+		//   }
+		// }
+		// //渲染商家数据
+		// function loadBussiness(){
+		// 	var url = baseURL+"/Business/findAll";
+		// 	$("#bussiness_table tbody").empty();
+		// 	$.get(url,function(response){
+		// 		// loadOption();
+		// 		response.data.forEach(function(item){
+		// 		if(item.status === "审核通过"){
+		// 			$(`<tr>
+		// 			<td><input type="checkbox" value="`+item.id+`"/></td>
+		// 			<td>`+item.name+`</td>
+		// 			<td>`+item.contactName+`</td>
+		// 			<td>`+item.contactPhone+`</td>
+		// 			<td>`+item.industry+`</td>
+		// 			<td>`+item.location+`</td>
+		// 			<td>`+item.scale+`</td>
+		// 			<td><a href="javascript:void(0)" class="description">查看</a></td>
+		// 			<td>
+		// 				<span style="color:#008000;">审核通过</span>
+		// 			</td>
+		// 			</tr>`).appendTo("#bussiness_table tbody");
+		// 			} else if(item.status === "拒绝"){
+		// 				$(`<tr>
+		// 						<td><input type="checkbox" value="`+item.id+`"/></td>
+		// 						<td>`+item.name+`</td>
+		// 						<td>`+item.contactName+`</td>
+		// 						<td>`+item.contactPhone+`</td>
+		// 						<td>`+item.industry+`</td>
+		// 						<td>`+item.location+`</td>
+		// 						<td>`+item.scale+`</td>
+		// 						<td><a href="javascript:void(0)" class="description">查看</a></td>
+		// 						<td>
+		// 							<span style="color:#ff0000;">已拒绝</span>	
+		// 						</td>
+		// 					</tr>`).appendTo("#bussiness_table tbody");
+		// 				}
+		// 				else if(item.status === "待审核"){
+		// 					$(`<tr>
+		// 						<td><input type="checkbox" value="`+item.id+`"/></td>
+		// 						<td>`+item.name+`</td>
+		// 						<td>`+item.contactName+`</td>
+		// 						<td>`+item.contactPhone+`</td>
+		// 						<td>`+item.industry+`</td>
+		// 						<td>`+item.location+`</td>
+		// 						<td>`+item.scale+`</td>
+		// 						<td><a href="javascript:void(0)" class="description">查看</a></td>
+		// 						<td>
+		// 							<button class="layui-btn layui-btn-xs" id="pass">通过</button>
+		// 							<button class="layui-btn layui-btn-xs" id="reject">拒绝</button>	
+		// 						</td>
+		// 					</tr>`).appendTo($("#bussiness_table tbody"));
+
+		// 				}
+		// 			});
+		// 		})
+		// 	}
+		// 	//重载数据
+		// 	loadBussiness();
+			// 渲染招聘数据
+		// 	function loadEmployment(){
+		// 	var url = baseURL+"/Employment/findAll";
+		// 	$("#employment_table tbody").empty();
+		// 	$.get(url,function(response){
+		// 		response.data.forEach(function(item){
+		// 			if(item.auditStatus === "通过"){
+		// 				$(`<tr>
+  //   					<td><input type="checkbox" value="`+item.id+`"/></td>
+  //   					<td>`+item.title+`</td>
+  //   					<td>`+item.contactName+`</td>
+  //   					<td>`+item.contactPhone+`</td>
+  //   					<td>`+item.job+`</td>
+  //   					<td>`+dateParse(item.publishTime)+`</td>
+  //   					<td><a href="javascript:void(0)" class="description">查看</a></td>
+  //   					<td>
+  //   						<span style="color:#008000;">审核通过</span>
+  //   					</td>
+		//     		</tr>`).appendTo($("employment_table tbody"))
+		// 			} else if(item.auditStatus === "拒绝"){
+		// 				$(`<tr>
+  //   					<td><input type="checkbox" value="`+item.id+`"/></td>
+  //   					<td>`+item.title+`</td>
+  //   					<td>`+item.contactName+`</td>
+  //   					<td>`+item.contactPhone+`</td>
+  //   					<td>`+item.job+`</td>
+  //   					<td>`+dateParse(item.publishTime)+`</td>
+  //   					<td><a href="javascript:void(0)" class="description">查看</a></td>
+  //   					<td>
+  //   						<span style="color:#ff0000;">已拒绝</span>
+  //   					</td>
+		//     		</tr>`).appendTo($("#employment_table tbody"))
+								
+		// 			} else if(item.auditStatus === "待审核"){
+		// 				$(`<tr>
+	 //    					<td><input type="checkbox" value="`+item.id+`"/></td>
+	 //    					<td>`+item.title+`</td>
+	 //    					<td>`+item.contactName+`</td>
+	 //    					<td>`+item.contactPhone+`</td>
+	 //    					<td>`+item.job+`</td>
+	 //    					<td>`+dateParse(item.publishTime)+`</td>
+	 //    					<td><a href="javascript:void(0)" class="description">查看</a></td>
+	 //    					<td>
+	 //    						<button class="layui-btn layui-btn-xs" id="pass">通过</button>
+		// 						<button class="layui-btn layui-btn-xs" id="reject">拒绝</button>
+	 //    					</td>
+		// 	    		</tr>`).appendTo($("#employment_table tbody"))
+		// 			}
+		// 		})
+		// 	})
+		// }
+		// // 加载数据结束
+		// //重载数据开始
+		// loadEmployment();
+		// 重载数据结束
+		// function loadOption(){
+		// 	$.get(baseURL+"/Employment/findAll",function(response){
+		// 		response.data.forEach(function(item){
+		// 			$('<option value='+item.job+'>'+item.job+'</option>').appendTo($('#select_job'))
+		// 		})
+		// 	})
+		// }
+		// loadOption()
+		// function loadStatus(){
+		// 	$("tbody").on("click","button",function(event){
+		// 		switch(this.id){
+		// 			case "btn_pass":
+		// 				var id = $(this).parents("tr").children().eq(0).find("input").val();
+						
+		// 				break;
+		// 			case "btn_reject":
+		// 				break;
+		// 			}
+		// 			event.preventDefault();
+		// 	})
+		// }
+		// loadStatus()
+		//给招聘查看绑定事件开始
+		// function loadeEmploymentMessage(){
+		// 	// 详情模态框弹出
+		// 	$('#employment_table tbody').on({click:function(){
+		// 		$('#employmentModal').modal('show')
+		// 		var id = $(this).parents("tr").children().eq(0).find("input").val()
+		// 	var data = {
+		// 		id:id
+		// 	}
+		// 	var url = baseURL+"/Employment/findById"
+		// 	$.get(url,data,function(response){
+		// 		$("#modal-content2").empty()
+		// 		$(`
+		// 		     <div class="modal-header">
+		// 		      	<div class="top">
+		// 		      		<div style="margin-top: 15px;">
+		// 		      			<b>岗位:`+response.data.job+`</b>
+		// 		      			<span id="salary">薪资:`+response.data.salary+`元/月</span>
+		// 		      		</div>
+		// 		      		<div style="margin-top: 15px;">
+		// 		      			<span id="num">招`+response.data.num+`人</span>
+		// 			      		<span id="workingHours">工作经验:`+response.data.workingHours+`</span>
+		// 		      		</div>
+		// 		      		<div style="margin-top: 15px;"><i class="fa fa-map-marker" style="color:#868686; margin-right:10px;"></i>工作地点:`+response.data.province+`省`+response.data.city+`市</div>
+		// 		      		<div style="margin-top: 15px;">
+		// 		      			<span id="welfare">`+response.data.welfare+`</span>
+		// 		      			<span id="title">招聘公司:`+response.data.title+`</span>
+		// 		      		</div>
+		// 		      	</div>	
+		// 		      </div>
+		// 		      <div class="modal-body">
+		// 		      	<div class="row">
+		// 		      		<div class="col ml-3" style="margin-top:15px;">
+		// 		      			<b >职位描述</b>
+		// 		      			<p style="margin-top: 15px;">`+response.data.description+`</p>
+		// 		      		</div>
+		// 		      	</div>
+		// 		      </div>
+		// 		      <div class="modal-footer">
+		// 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+		// 		      </div>`).appendTo($("#modal-content2"))
+		// 	})
+		// 	}},'.description')
+			
+		// }
+		// loadeEmploymentMessage()
+		//给招聘查看绑定事件结束 
+		// 给商家查看绑定事件开始
+		// function loadBussinessMessage(){
+			// 详情模态框弹出
+		// 	$('#bussiness_table tbody').on({click:function(){
+		// 		$('#bussinessModal').modal('show')
+		// 		var id = $(this).parents("tr").children().eq(0).find("input").val()
+		// 		var data = {
+		// 			id:id
+		// 		}
+		// 		var url = baseURL+"/Business/findById"
+		// 		$.get(url,data,function(response){
+		// 			$("#modal-content1").empty()
+		// 			$(`
+		// 			     <div class="modal-header">
+		// 			      	<div class="top">
+		// 			      		<b>企业名称:`+response.data.name+`</b>
+		// 			      		<p>行业类型:`+response.data.industry+`</p>
+		// 			      		<p>公司规模:`+response.data.scale+`</p>
+		// 			      	</div>	
+		// 			     </div>
+		// 			      <div class="modal-body" style="color:#999999;">
+		// 			      	<div class="row">
+		// 			      		<div class="col ml-4">行业类型:`+response.data.industry+`</div>
+		// 			      	</div>
+		// 			      	<div class="row">
+		// 			      		<div class="col ml-4">成立时间:`+response.data.establishedTime+`</div>
+		// 			      	</div>
+		// 			      	<div class="row">
+		// 			      		<div class="col ml-4">注册资本:`+response.data.registeredCapital+`</div>
+		// 			      	</div>
+		// 			      	<div class="row">
+		// 			      		<div class="col ml-4">描述:`+response.data.description+`</div>
+		// 			      	</div>
+		// 			      	<div class="row">
+		// 			      		<div class="col ml-4">营业执照:`+response.data.businessLicense+`</div>
+		// 			      	</div>		
+		// 			      </div>
+		// 			      <div class="modal-footer">
+		// 			        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+		// 			      </div>`).appendTo($("#modal-content1"))
+		// 		})
+		// 		}},'.description')	
+		// 	}
+		// 	loadBussinessMessage()
+		// 	// 给商家查看绑定事件结束	
+		})
+</script>
+<div class="main">
+	<!-- 基本信息开始 -->
+	<div class="top">
+		<div class="resume">
+			<span style="color: #F40093;">32118</span>
+			<i class="fa fa-file-text" style="font-size:40px; color:#F40093;"></i>	
+			<p>简历</p>
+		</div>
+		<div class="user">
+			<span style="color: #329999;">3125</span>
+			<i class="fa fa-user-o" style="font-size:40px; color:#329999;"></i>
+			<p>用户</p>
+		</div>
+		<div class="bussiness">
+			<span style="color: #ff9900;">614</span>
+			<i class="fa fa-registered" style="font-size:40px; color:#ff9900;"></i>
+			<p>商家</p>
+		</div>
+		<div class="browser">
+			<span style="color: #0080ff;">213213</span>
+			<i class="fa fa-eye" style="font-size:40px; color:#0080ff;"></i>
+			<p>浏览</p>
+		</div>
+	</div>
+	<!-- 基本信息结束 -->
+	<div class="bottom">
+		<!-- <div class="left">
+			<div class="audit">待审核</div>
+			<div class="layui-tab">
+			  <ul class="layui-tab-title">
+			    <li class="layui-this">商家</li>
+			    <li>招聘</li> 
+			  </ul>
+			  <div class="layui-tab-content">
+			  	<!-- 商家审核 -->
+			    <!-- <div class="layui-tab-item layui-show">
+					<table class="table table-bordered table-sm text-center" id="bussiness_table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>企业名称</th>
+								<th>联系人</th>
+								<th>联系方式</th>
+								<th>行业</th>
+								<th>所在地</th>
+								<th>公司规模</th>
+								<th>详情</th>
+								<th width="100px">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+					
+			    </div> -->
+			    <!-- 商家审核 -->
+			    <!-- 招聘审核 -->
+			    <!-- <div class="layui-tab-item">
+		    		<table class="table table-bordered table-sm text-center" id="employment_table">
+		    			<thead>
+		    				<tr>
+		    					<th>#</th>
+		    					<th>招聘标题</th>
+		    					<th>发布人</th>
+		    					<th>联系方式</th>
+		    					<th>职位</th>
+		    					<th>发布时间</th>
+		    					<th>详情</th>
+		    					<th>操作</th>
+		    				</tr>
+		    			</thead>
+		    			<tbody>
+
+		    			</tbody>
+		    			
+		    		</table>
+			    </div> -->
+			    <!-- /招聘审核 -->
+			  <!-- </div> -->
+			<!-- </div> -->
+		<!-- </div> --> 
+	</div>
+	<div class="right">
+		<div style="font-weight:bold;"><span>热门招聘</span></div>
+		<div>
+			<span>Cras justo odio</span>
+			<div class="one">4</div>
+		</div>
+		<div>
+			<span>Dapibus ac facilisis in</span>
+			<div class="two">2</div>
+		</div>
+		<div>
+			<span>Morbi leo risus</span>
+			<div class="three">1</div>
+		</div>
+		<div>
+			<span>Porta ac consectetur ac</span>
+			<div class="four">3</div>
+		</div>
+		<div>
+			<span>Vestibulum at eros</span>
+			<div class="five">8</div>
+		</div>
+		<div>
+			<span>Porta ac consectetur</span>
+			<div class="six">3</div>
+		</div>
+		<div>
+			<span>Vestibulum at eros</span>
+			<div class="seven">8</div>
+		</div>
+		<div></div>
+	</div>
+		<!-- 商家详情模态框 -->
+		<div class="modal" tabindex="-1" id="bussinessModal">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content" id="modal-content1">
+		    </div>
+		  </div>
+		</div>
+		<!-- /商家详情模态框 -->
+		<!-- 招聘详情模态框 -->
+		<div class="modal" tabindex="-1" id="employmentModal">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content" id="modal-content2">
+		    </div>
+		  </div>
+		</div>
+		<!-- /招聘详情模态框 -->
+
+</div>

@@ -1,0 +1,97 @@
+<style>
+	.layui-tab-title{
+		padding: 0;
+		margin:0;
+	}
+	.child_top{
+		width: 100%;
+		height: 100%;
+		background-color: #333;
+		color: #fff;
+		padding: 10px;
+	}
+	.child_bottom{
+		border: 1px solid gray;
+		padding: 20px;
+	}
+	span{
+		margin-right: 10px;
+	}
+	input{
+		border-radius: 5px;
+	}
+	#add{
+		background-color: #ff6600;
+		margin-bottom: 10px;
+	}
+	i{
+		margin-right: 5px;
+	}
+</style>
+<script>
+	$(function(){
+		var baseURL = "http://203.195.246.58:7777";
+		$(".child_bottom").on({click:function(){
+			$(".child_bottom a").remove()
+			$(".child_bottom").append($(`<input type="text" name="submit"><button style="border-radius:5px; background-color:teal;">按钮</button>`))
+		}},"a")
+		//加载数据
+		function loadCity(){
+			var url = baseURL+"/Jobs/findAll";
+			$(".child_bottom").empty()
+			$.get(url,function(response){
+				response.data.forEach(function(item){
+					$(".child_bottom").append($(`<span>`+item.name+`</span>`))					
+				})
+			
+			$(".child_bottom").append($(`<a href="#">添加</a> `))
+			})
+		}
+		loadCity();
+		$(".child_bottom").on({click:function(){
+			// alert(1)
+			var name = $("input[name=submit]").val()
+			var obj = {
+				name:name
+			}
+			$.post(baseURL+"/Jobs/saveOrUpdate",obj,function(response){
+				toast("成功")
+				loadCity()
+			})
+		}},"button")
+		$(".toast").toast({
+			delay:2000
+		});
+		// 弹出提示框
+		function toast(msg){
+			$(".toast .toast-body").text(msg);
+			$(".toast").toast("show")
+		}
+	})
+
+</script>
+<div class="main">
+	<div class="child">
+	<button id="add" class="layui-btn layui-btn-sm"><i class="fa fa-exclamation-circle"></i>添加职位</button>
+		<div class="child_top">
+			<span>普工</span>
+		</div>
+		<div class="child_bottom">
+		</div>
+	</div>
+	<!-- 提示框 -->
+	<div class="toast" style="position: absolute;top: 1em;right: 1em">
+	  <div class="toast-header">
+	    <i class="fa fa-bell text-success mr-5"></i>
+	    <strong class="mr-auto">success</strong>
+	    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+	      <span>&times;</span>
+	    </button>
+	  </div>
+	  <div class="toast-body"> </div> 
+	</div>
+	<!-- /提示框 -->
+</div>
+
+
+

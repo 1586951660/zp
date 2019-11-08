@@ -1,0 +1,123 @@
+<style>
+	.layui-tab-title{
+		padding: 0;
+		margin:0;
+	}
+	.layui-tab-content{
+		padding:0; 
+	}
+	#select_all{
+		width: 120px;
+		height: 30px;
+		border-radius: 4px;
+		margin-bottom: 5px;
+	}
+	thead{
+		color: #fff;
+	}
+	#delete{
+		background-color: red;
+		color: #fff;
+	}
+</style>
+<script>
+	$(function(){
+		var baseURL = "http://203.195.246.58:7777"
+		function loadWelfare(){
+			var url = baseURL+"/Welfare/findAll";
+			$("#welfare_table tbody").empty()
+			$.get(url,function(response){
+				data = response.data
+				response.data.forEach(function(item){
+					if(item.status === '使用中'){
+						$(`<tr>
+							<td><input type="checkbox" value="`+item.id+`"/></td>
+							<td>`+item.name+`</td>
+							<td style="color:#008000">`+item.status+`</td>
+							<td>
+								<button style="background-color:#ff6600" id="btn_freeze" class="layui-btn layui-btn-xs">冻结</button>
+							</td>
+						</tr>
+							`).appendTo("#welfare_table tbody")
+					} else if(item.status === '被冻结'){
+						$(`<tr>
+							<td><input type="checkbox" value="`+item.id+`"/></td>
+							<td>`+item.name+`</td>
+							<td style="color:#ff6600">`+item.status+`</td>
+							<td>
+								<button style="background-color:#008000" id="btn_recover" class="layui-btn layui-btn-xs">恢复</button>
+							</td>
+						</tr>
+							`).appendTo("#welfare_table tbody")
+					}
+				})
+			})
+
+		}
+		loadWelfare()
+		//冻结和恢复
+		function loadStatus(){
+			$("tbody").on("click","button",function(event){
+			switch(this.id){
+				case "btn_freeze":
+					var id = $(this).parents("tr").children().eq(0).find("input").val();
+					var name = $(this).parents("tr").children().eq(1).text()
+					var status = "被冻结"
+					var url =baseURL+"/Welfare/saveOrUpdate"
+					var data = {
+						id:id,
+						name:name,
+						status:status
+					}
+					$.post(url,data,function(){
+						loadWelfare();
+					})
+					break;
+				case "btn_recover":
+					var id = $(this).parents("tr").children().eq(0).find("input").val();
+					var name = $(this).parents("tr").children().eq(1).text()
+					var status = "使用中"
+					var url =baseURL+"/Welfare/saveOrUpdate"
+					var data = {
+						id:id,
+						name:name,
+						status:status
+					}
+					$.post(url,data,function(){
+						loadWelfare();
+					})
+					break;
+				}
+				event.preventDefault();
+
+			})
+		}
+		loadStatus()
+
+
+
+
+		
+			
+	})
+</script>
+<div class="main">
+	<form action="" id="select_all">
+		<select name="" id="select_all">
+			<option value="" type="display:none">全部</option>
+		</select>
+	</form>
+	<table  class="table table-bordered table-sm text-center" id="welfare_table">
+		<thead class="bg-dark">
+			<tr>
+				<th>#</th>
+				<th>福利名称</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	<button id="delete" class="layui-btn layui-btn-xs">删除</button>
+</div>
